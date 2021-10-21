@@ -212,7 +212,7 @@ TrUe            t[Rr][Uu][Ee]
 
 <STR,STResp>\0		{
 						BEGIN(STRbad);
-						yylval.error_msg = "String contains null character";
+						yylval.error_msg = "String contains null character.";
 						return ERROR;
 					}
 
