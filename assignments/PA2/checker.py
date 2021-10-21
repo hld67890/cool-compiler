@@ -17,6 +17,6 @@ for case in files:
 	ans = subprocess.run ( [stdlex , path + '/tests/' + case ] , capture_output = True).stdout.decode()
 	if not out == ans:
 		print ( "WA on testcase " , case )
-		print ( out )
-	if case == 'null3.cl': print ( ans )
+		print ( 'out:' , out )
+		print ( 'ans:' , ans )
 

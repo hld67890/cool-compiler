@@ -95,8 +95,8 @@ TrUe            t[Rr][Uu][Ee]
 
 <sCOMMENT><<EOF>>   {
 						BEGIN(INITIAL);
-						yylval.error_msg = "EOF in comment";
-						return ERROR;
+						//yylval.error_msg = "EOF in comment";
+						//return ERROR;
 					}
 
 <sCOMMENT>\n		{
@@ -210,14 +210,25 @@ TrUe            t[Rr][Uu][Ee]
 
  /* !!!!!!!!!!!!!!!!!!!!string NULL character  */
 
-<STR,STResp>\0		{
+<STR>\0		{
 						BEGIN(STRbad);
 						yylval.error_msg = "String contains null character.";
 						return ERROR;
 					}
+<STResp>\0		{
+						BEGIN(STRbad);
+						yylval.error_msg = "String contains escaped null character.";
+						return ERROR;
+					}
 
 
-<STR,STResp><<EOF>> {
+<STResp><<EOF>> {
+						BEGIN(INITIAL);
+						yylval.error_msg = "backslash at end of file";
+						return ERROR;
+					}
+
+<STR><<EOF>> {
 						BEGIN(INITIAL);
 						yylval.error_msg = "EOF in string constant";
 						return ERROR;
@@ -228,6 +239,10 @@ TrUe            t[Rr][Uu][Ee]
 				BEGIN(INITIAL);
 			}
 			
+<STRbad>"\\\"" {}
+<STRbad>"\\"\n {curr_lineno++;/*Special case!!*/}
+<STRbad>"\\". {}
+
 <STRbad>"\"" {BEGIN(INITIAL);}
 
 <STRbad><<EOF>> {BEGIN(INITIAL);}
