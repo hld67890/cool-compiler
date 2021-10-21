@@ -35,6 +35,7 @@ extern FILE *fin; /* we read from this file */
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
 char *string_buf_ptr;
 int len;
+int nestcom;
 
 extern int curr_lineno;
 extern int verbose_flag;
@@ -115,8 +116,14 @@ TrUe            t[Rr][Uu][Ee]
 						return ERROR;
 					}
 
+<mCOMMENT>"(*"	{
+					nestcom++;
+				}
+
 <mCOMMENT>"*)"	{
-					BEGIN(INITIAL);
+					nestcom--;
+					if ( nestcom == 0 )
+						BEGIN(INITIAL);
 				}
 
 <INITIAL>"*)"	{
@@ -126,6 +133,7 @@ TrUe            t[Rr][Uu][Ee]
 
 <INITIAL>"(*"	{
 					BEGIN(mCOMMENT);
+					nestcom = 1;
 				}
 
 <mCOMMENT>\n 	{curr_lineno++;}
