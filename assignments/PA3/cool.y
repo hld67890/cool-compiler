@@ -135,10 +135,29 @@
     %type <class_> class
     
     /* You will want to change the following line. */
-    %type <features> dummy_feature_list
+    %type <features> feature_list
+    %type <feature> feature
+    %type <formals> formal_list
+    %type <formal> formal
+    %type <expressions> disexpressions
+    %type <expressions> _disexpressions
+    %type <expressions> blkexpressions
+    %type <expression> expression
+    %type <expression> lets
+    %type <cases> cases
+    %type <case_> acase
+    
     
     /* Precedence declarations go here. */
-    
+    %right ASSIGN
+    %left NOT
+    %nonassoc LE '<' '='
+    %left '+' '-'
+    %left '*' '/'
+    %left ISVOID
+    %left '~'
+    %left '@'
+    %left '.'
     
     %%
     /* 
@@ -157,17 +176,269 @@
     ;
     
     /* If no parent is specified, the class inherits from the Object class. */
-    class	: CLASS TYPEID '{' dummy_feature_list '}' ';'
+    class	: CLASS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,idtable.add_string("Object"),$4,
     stringtable.add_string(curr_filename)); }
-    | CLASS TYPEID INHERITS TYPEID '{' dummy_feature_list '}' ';'
+    | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
+    | error
+    {}
+    | CLASS error ';'
+    {}
     ;
     
     /* Feature list may be empty, but no empty features in list. */
-    dummy_feature_list:		/* empty */
-    {  $$ = nil_Features(); }
+    feature_list:		/* empty */
+     {  $$ = nil_Features(); }
+    | feature_list feature ';'
+    {
+    	$$ = append_Features ( $1 , single_Features($2) );
+    }
+    ;
     
+    feature:
+    OBJECTID '(' ')' ':' TYPEID '{' expression '}'
+    {
+    	$$ = method ( $1 , nil_Formals () , $5 , $7 );
+    }
+    | OBJECTID '(' formal_list ')' ':' TYPEID '{' expression '}'
+    {
+    	$$ = method ( $1 , $3 , $6 , $8 );
+	}
+	| OBJECTID ':' TYPEID
+	{
+		SET_NODELOC(0);
+		auto nw = no_expr ();
+		SET_NODELOC(@1);
+		$$ = attr ( $1 , $3 , nw );
+	}
+	| OBJECTID ':' TYPEID ASSIGN expression
+	{
+		$$ = attr ( $1 , $3 , $5 );
+	}
+	| error
+	{}
+	;
+	
+	formal_list:
+	formal
+	{
+		$$ = single_Formals ( $1 );
+	}
+	| formal_list ',' formal
+	{
+		$$ = append_Formals ( $1 , single_Formals ( $3 ) );
+	}
+	;
+	
+	formal:
+	OBJECTID ':' TYPEID
+	{
+		$$ = formal ( $1 , $3 );
+	}
+	
+	_disexpressions:
+	
+	{
+		$$ = nil_Expressions ();
+	}
+	| _disexpressions ',' expression
+	{
+		$$ = append_Expressions ( $1 , single_Expressions ( $3 ) );
+	}
+	;
+	
+	disexpressions:
+	
+	{
+		$$ = nil_Expressions ();
+	}
+	| expression _disexpressions
+	{
+		$$ = append_Expressions ( single_Expressions ( $1 ) , $2 );
+	}
+	;
+	
+	blkexpressions:
+	expression ';'
+	{
+		$$ = single_Expressions ( $1 );
+	}
+	| blkexpressions expression ';'
+	{
+		$$ = append_Expressions ( $1 , single_Expressions ( $2 ) );
+	}
+	| error ';'
+	{}
+	| blkexpressions error ';'
+	{}
+	;
+	
+	expression:
+	OBJECTID ASSIGN expression
+	{
+		$$ = assign ( $1 , $3 );
+	}
+	| expression '.' OBJECTID '(' disexpressions ')'
+	{
+		SET_NODELOC(@2);
+		$$ = dispatch ( $1 , $3 , $5 );
+	}
+	| expression '@' TYPEID '.' OBJECTID '(' disexpressions ')'
+	{
+		SET_NODELOC(@4);
+		$$ = static_dispatch ( $1 , $3 , $5 , $7 );
+	}
+	| OBJECTID '(' disexpressions ')'
+	{
+		$$ = dispatch ( object(idtable.add_string("self")) , $1 , $3 );
+	}
+	| IF expression THEN expression ELSE expression FI
+	{
+		$$ = cond ( $2 , $4 , $6 );
+	}
+	| WHILE expression LOOP expression POOL
+	{
+		$$ = loop ( $2 , $4 );
+	}
+	| '{' blkexpressions '}'
+	{
+		$$ = block ( $2 );
+	}
+	| LET lets
+	{
+		$$ = $2;
+	}
+	| CASE expression OF cases ESAC
+	{
+		$$ = typcase ( $2 , $4 );
+	}
+	| NEW TYPEID
+	{
+		SET_NODELOC(@1);
+		$$ = new_ ( $2 );
+	}
+	| ISVOID expression
+	{
+		SET_NODELOC(@1);
+		$$ = isvoid ( $2 );
+	}
+	| expression '+' expression
+	{
+		SET_NODELOC(@2);
+		$$ = plus ( $1 , $3 );
+	}
+	| expression '-' expression
+	{
+		SET_NODELOC(@2);
+		$$ = sub ( $1 , $3 );
+	}
+	| expression '*' expression
+	{
+		SET_NODELOC(@2);
+		$$ = mul ( $1 , $3 );
+	}
+	| expression '/' expression
+	{
+		SET_NODELOC(@2);
+		$$ = divide ( $1 , $3 );
+	}
+	| '~' expression
+	{
+		SET_NODELOC(@1);
+		$$ = neg ( $2 );
+	}
+	| expression '<' expression
+	{
+		SET_NODELOC(@2);
+		$$ = lt ( $1 , $3 );
+	}
+	| expression '=' expression
+	{
+		SET_NODELOC(@2);
+		$$ = eq ( $1 , $3 );
+	}
+	| expression LE expression
+	{
+		SET_NODELOC(@2);
+		$$ = leq ( $1 , $3 );
+	}
+	| NOT expression
+	{
+		SET_NODELOC(@1);
+		$$ = comp ( $2 );
+	}
+	| '(' expression ')'
+	{
+		SET_NODELOC(@2);
+		$$ = $2;
+	}
+	| OBJECTID
+	{
+		$$ = object ( $1 );
+	}
+	| INT_CONST
+	{
+		$$ = int_const ( $1 );
+	}
+	| STR_CONST
+	{
+		$$ = string_const ( $1 );
+	}
+	| BOOL_CONST
+	{
+		$$ = bool_const ( $1 );
+	}
+	;
+    
+    lets:
+    OBJECTID ':' TYPEID IN expression
+    {
+		SET_NODELOC(0);
+		auto nw = no_expr ();
+		SET_NODELOC(@1);
+    	$$ = let ( $1 , $3 , nw , $5 );
+    }
+    | OBJECTID ':' TYPEID ASSIGN expression IN expression
+    {
+    	$$ = let ( $1 , $3 , $5 , $7 );
+    }
+    | OBJECTID ':' TYPEID ',' lets
+    {
+		SET_NODELOC(0);
+		auto nw = no_expr ();
+		SET_NODELOC(@1);
+    	$$ = let ( $1 , $3 , nw , $5 );
+    }
+    | OBJECTID ':' TYPEID ASSIGN expression ',' lets
+    {
+    	$$ = let ( $1 , $3 , $5 , $7 );
+    }
+    | error ',' lets
+    {}
+  	| OBJECTID ':' TYPEID IN error
+  	{}
+  	| OBJECTID ':' TYPEID ASSIGN expression IN error
+  	{}
+    ;
+    
+    cases:
+    acase
+    {
+    	$$ = single_Cases($1);
+    }
+    | cases acase
+    {
+    	$$ = append_Cases ( $1 , single_Cases($2) );
+	}
+	;
+	
+	acase:
+	OBJECTID ':' TYPEID DARROW expression ';'
+	{
+		$$ = branch ( $1 , $3 , $5 );
+	}
+	;
     
     /* end of grammar */
     %%

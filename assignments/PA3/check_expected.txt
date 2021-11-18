@@ -1,0 +1,588 @@
+#1
+_program
+  #1
+  _class
+    A
+    Int
+    "./tests/line_num2.cool"
+    (
+    )
+  #9
+  _class
+    A
+    Object
+    "./tests/line_num2.cool"
+    (
+    )
+  #15
+  _class
+    A
+    Object
+    "./tests/line_num2.cool"
+    (
+    #17
+    _method
+      var0
+      #19
+      _formal
+        foo
+        Int
+      Int
+      #26
+      _int
+        0
+      : _no_type
+    #29
+    _method
+      var1
+      #31
+      _formal
+        foo
+        Int
+      #35
+      _formal
+        bar
+        Int
+      Int
+      #42
+      _int
+        0
+      : _no_type
+    #45
+    _method
+      var2
+      Int
+      #51
+      _int
+        0
+      : _no_type
+    #54
+    _attr
+      var3
+      Int
+      #58
+      _int
+        0
+      : _no_type
+    #59
+    _attr
+      var4
+      Int
+      #0
+      _no_expr
+      : _no_type
+    #64
+    _method
+      line_no
+      Int
+      #66
+      _int
+        0
+      : _no_type
+    #68
+    _method
+      line_no
+      Int
+      #70
+      _assign
+        id
+        #73
+        _int
+          0
+        : _no_type
+      : _no_type
+    #76
+    _method
+      line_no
+      Int
+      #81
+      _dispatch
+        #79
+        _int
+          0
+        : _no_type
+        id
+        (
+        )
+      : _no_type
+    #86
+    _method
+      line_no
+      Int
+      #91
+      _dispatch
+        #89
+        _int
+          0
+        : _no_type
+        id
+        (
+        #95
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #99
+    _method
+      line_no
+      Int
+      #104
+      _dispatch
+        #102
+        _int
+          0
+        : _no_type
+        id
+        (
+        #108
+        _int
+          0
+        : _no_type
+        #112
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #116
+    _method
+      line_no
+      Int
+      #123
+      _static_dispatch
+        #119
+        _int
+          0
+        : _no_type
+        Int
+        id
+        (
+        )
+      : _no_type
+    #128
+    _method
+      line_no
+      Int
+      #135
+      _static_dispatch
+        #131
+        _int
+          0
+        : _no_type
+        Int
+        id
+        (
+        #139
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #143
+    _method
+      line_no
+      Int
+      #150
+      _static_dispatch
+        #146
+        _int
+          0
+        : _no_type
+        Int
+        id
+        (
+        #154
+        _int
+          0
+        : _no_type
+        #158
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #162
+    _method
+      line_no
+      Int
+      #164
+      _dispatch
+        #164
+        _object
+          self
+        : _no_type
+        id
+        (
+        )
+      : _no_type
+    #168
+    _method
+      line_no
+      Int
+      #170
+      _dispatch
+        #170
+        _object
+          self
+        : _no_type
+        id
+        (
+        #173
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #178
+    _method
+      line_no
+      Int
+      #180
+      _dispatch
+        #180
+        _object
+          self
+        : _no_type
+        id
+        (
+        #183
+        _int
+          0
+        : _no_type
+        #187
+        _int
+          0
+        : _no_type
+        )
+      : _no_type
+    #191
+    _method
+      line_no
+      Int
+      #193
+      _cond
+        #195
+        _int
+          0
+        : _no_type
+        #199
+        _int
+          0
+        : _no_type
+        #203
+        _int
+          0
+        : _no_type
+      : _no_type
+    #207
+    _method
+      line_no
+      Int
+      #209
+      _loop
+        #211
+        _int
+          0
+        : _no_type
+        #215
+        _int
+          0
+        : _no_type
+      : _no_type
+    #219
+    _method
+      line_no
+      Int
+      #221
+      _block
+        #223
+        _int
+          0
+        : _no_type
+        #227
+        _int
+          0
+        : _no_type
+      : _no_type
+    #232
+    _method
+      line_no
+      Int
+      #235
+      _let
+        id
+        Int
+        #0
+        _no_expr
+        : _no_type
+        #240
+        _int
+          0
+        : _no_type
+      : _no_type
+    #243
+    _method
+      line_no
+      Int
+      #246
+      _let
+        id
+        Int
+        #251
+        _int
+          0
+        : _no_type
+        #255
+        _int
+          0
+        : _no_type
+      : _no_type
+    #258
+    _method
+      line_no
+      Int
+      #261
+      _let
+        id
+        Int
+        #266
+        _int
+          0
+        : _no_type
+        #269
+        _let
+          id2
+          Int
+          #274
+          _int
+            0
+          : _no_type
+          #278
+          _int
+            0
+          : _no_type
+        : _no_type
+      : _no_type
+    #281
+    _method
+      line_no
+      Int
+      #283
+      _typcase
+        #285
+        _int
+          0
+        : _no_type
+        #288
+        _branch
+          id1
+          Int
+          #293
+          _int
+            0
+          : _no_type
+        #296
+        _branch
+          id2
+          Int
+          #301
+          _int
+            0
+          : _no_type
+      : _no_type
+    #306
+    _method
+      line_no
+      Int
+      #308
+      _new
+        Int
+      : _no_type
+    #311
+    _method
+      line_no
+      Int
+      #313
+      _isvoid
+        #315
+        _int
+          0
+        : _no_type
+      : _no_type
+    #318
+    _method
+      line_no
+      Int
+      #323
+      _plus
+        #321
+        _int
+          0
+        : _no_type
+        #325
+        _int
+          0
+        : _no_type
+      : _no_type
+    #329
+    _method
+      line_no
+      Int
+      #334
+      _sub
+        #332
+        _int
+          0
+        : _no_type
+        #336
+        _int
+          0
+        : _no_type
+      : _no_type
+    #340
+    _method
+      line_no
+      Int
+      #345
+      _mul
+        #343
+        _int
+          0
+        : _no_type
+        #347
+        _int
+          0
+        : _no_type
+      : _no_type
+    #351
+    _method
+      line_no
+      Int
+      #356
+      _divide
+        #354
+        _int
+          0
+        : _no_type
+        #358
+        _int
+          0
+        : _no_type
+      : _no_type
+    #361
+    _method
+      line_no
+      Int
+      #363
+      _neg
+        #365
+        _int
+          0
+        : _no_type
+      : _no_type
+    #368
+    _method
+      line_no
+      Int
+      #373
+      _lt
+        #371
+        _int
+          0
+        : _no_type
+        #375
+        _int
+          0
+        : _no_type
+      : _no_type
+    #378
+    _method
+      line_no
+      Int
+      #383
+      _leq
+        #381
+        _int
+          0
+        : _no_type
+        #385
+        _int
+          0
+        : _no_type
+      : _no_type
+    #388
+    _method
+      line_no
+      Int
+      #393
+      _eq
+        #391
+        _int
+          0
+        : _no_type
+        #395
+        _int
+          0
+        : _no_type
+      : _no_type
+    #399
+    _method
+      line_no
+      Int
+      #401
+      _comp
+        #403
+        _int
+          0
+        : _no_type
+      : _no_type
+    #406
+    _method
+      line_no
+      Int
+      #409
+      _int
+        0
+      : _no_type
+    #412
+    _method
+      line_no
+      Int
+      #414
+      _object
+        id
+      : _no_type
+    #416
+    _method
+      line_no
+      Int
+      #418
+      _int
+        123456789
+      : _no_type
+    #420
+    _method
+      line_no
+      Int
+      #423
+      _string
+        "string \n      string"
+      : _no_type
+    #425
+    _method
+      line_no
+      Int
+      #427
+      _bool
+        1
+      : _no_type
+    #429
+    _method
+      line_no
+      Int
+      #431
+      _bool
+        0
+      : _no_type
+    )

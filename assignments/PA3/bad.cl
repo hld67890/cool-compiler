@@ -7,8 +7,13 @@
  *  generates
  *)
 
+
 (* no error *)
 class A {
+};
+
+
+clas F inherits A {
 };
 
 (* error:  b is not a type identifier *)
@@ -26,4 +31,3 @@ Class D inherts A {
 (* error:  closing brace is missing *)
 Class E inherits A {
 ;
-
