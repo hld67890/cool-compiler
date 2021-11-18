@@ -149,6 +149,7 @@
     
     
     /* Precedence declarations go here. */
+    %right flag
     %right ASSIGN
     %left NOT
     %nonassoc LE '<' '='
@@ -181,9 +182,7 @@
     stringtable.add_string(curr_filename)); }
     | CLASS TYPEID INHERITS TYPEID '{' feature_list '}' ';'
     { $$ = class_($2,$4,$6,stringtable.add_string(curr_filename)); }
-    | error
-    {}
-    | CLASS error ';'
+    | error ';'
     {}
     ;
     
@@ -392,14 +391,14 @@
 	;
     
     lets:
-    OBJECTID ':' TYPEID IN expression
+    OBJECTID ':' TYPEID IN expression %prec flag
     {
 		SET_NODELOC(0);
 		auto nw = no_expr ();
 		SET_NODELOC(@1);
     	$$ = let ( $1 , $3 , nw , $5 );
     }
-    | OBJECTID ':' TYPEID ASSIGN expression IN expression
+    | OBJECTID ':' TYPEID ASSIGN expression IN expression %prec flag
     {
     	$$ = let ( $1 , $3 , $5 , $7 );
     }
@@ -419,6 +418,8 @@
   	| OBJECTID ':' TYPEID IN error
   	{}
   	| OBJECTID ':' TYPEID ASSIGN expression IN error
+  	{}
+  	| error IN expression %prec flag
   	{}
     ;
     
