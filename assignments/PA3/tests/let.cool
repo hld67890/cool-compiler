@@ -1,0 +1,14 @@
+class Main {
+    fun():Int{
+	let 
+	x:Int<-1 
+	, 
+	y:Int<-
+	let
+	z:Int<-1
+	in
+	w<-1
+	in
+	u<-1
+	};
+};
