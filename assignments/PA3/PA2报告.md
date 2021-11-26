@@ -124,6 +124,72 @@ bison会自动把行号设置成constructor里面第一个参数的行号。cool
 
 得到的结果为需要特别设置的是一些二元运算符，需要把行号设置到符号上面；dispatch需要设置到 `.` 上面，no_expr需要设置为0.其他的都不需要动。
 
+### 1.7 移进/归约冲突问题
+
+#### 1.7.1 左递归/右递归
+
+在递归的语法规则中，例如
+
+```
+words : word
+        words word
+```
+
+有左递归和右递归两种写法，上面是一个左递归的例子，下面是右递归的例子。
+
+```
+words : word
+        word words
+```
+
+在LL语法分析中，不允许使用左递归的语法规则。但是在Bison中使用LR算法进行语法分析，LR算法同时允许左递归和右递归的语法规则，并且相较而言，左递归的写法更好。比如在解析
+
+```
+word word word word $end
+```
+
+时，左递归会进行如下操作：
+
+```
+压栈 word
+归约 words
+压栈 words word
+归约 words
+压栈 words word
+归约 words
+压栈 words word
+归约 words
+```
+
+而右递归需要：
+
+```
+压栈 			word
+压栈 			word word
+压栈 			word word word
+压栈 			word word word word
+看到$end，进行归约
+   		 	 word word word words
+   		 	 word word words
+    		 word words
+  	  		 words
+```
+
+可以发现当输入串变长时，左递归需要的栈深度是有限的，而右递归需要把所有符号入栈，需要更大的栈空间。
+
+#### 1.7.2 左因子
+
+相较而言，左因子会在LR语法分析中导致移进/归约冲突，例如cool语言中嵌套的`let`语句：
+
+```
+let x <- 1,
+y <-
+let z <- 1 in w <- 1
+in u <- 1
+```
+
+此时语义层面没有歧义，正确的解释应该是外层的`let`定义了`x,y`两个变量，和后面的`in`匹配，其中`y`的赋值为`let z <- 1 in w <- 1`。但是语法层面，不能唯一确定第一个`let`要和最远处的`in`匹配。这时就会出现移进/归约冲突。需要上文所述的`%prec flag`进行消歧义。
+
 ## 2 测试编写思路
 
 ### 2.1 good.cl
