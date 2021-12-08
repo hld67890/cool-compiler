@@ -28,6 +28,9 @@ public:
 };
 
 
+class method_class;
+class attr_class;
+
 // define simple phylum - Class_
 typedef class Class__class *Class_;
 

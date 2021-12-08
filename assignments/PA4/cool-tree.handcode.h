@@ -8,6 +8,8 @@
 #include "tree.h"
 #include "cool.h"
 #include "stringtab.h"
+#include <map>
+#include <vector>
 #define yylineno curr_lineno;
 extern int yylineno;
 
@@ -56,39 +58,78 @@ void dump_with_types(ostream&, int);
 
 #define Class__EXTRAS                   \
 virtual Symbol get_filename() = 0;      \
-virtual void dump_with_types(ostream&,int) = 0; 
+virtual void dump_with_types(ostream&,int) = 0; \
+virtual Symbol get_name() = 0; \
+virtual Symbol get_parentname() = 0;   \
+virtual Features get_Features() = 0;   \
+std::map<Symbol,Feature_class*> methodmap,attrmap;  \
+std::vector<Class_> child;
+
 
 
 #define class__EXTRAS                                 \
 Symbol get_filename() { return filename; }             \
-void dump_with_types(ostream&,int);                    
+void dump_with_types(ostream&,int);                    \
+Symbol get_name() { return name; }                     \
+Symbol get_parentname() { return parent; }            \
+Features get_Features() {return features;}
 
 
 #define Feature_EXTRAS                                        \
-virtual void dump_with_types(ostream&,int) = 0; 
+virtual void dump_with_types(ostream&,int) = 0; \
+virtual Symbol get_name() = 0; \
+virtual Symbol get_type() = 0; \
+virtual bool isMethod () = 0; \
+virtual bool isAttr () = 0;  \
+virtual Formals get_formals() = 0;\
+virtual Symbol checktype () = 0;
+
 
 
 #define Feature_SHARED_EXTRAS                                       \
-void dump_with_types(ostream&,int);    
+void dump_with_types(ostream&,int);                       \
+Symbol get_name() { return name; }                     \
+Symbol checktype ();
 
+
+#define method_EXTRAS   \
+bool isMethod () {return true;}; \
+bool isAttr () {return false;}; \
+Symbol get_type() { return return_type; }            \
+Formals get_formals () {return formals;}
+
+
+#define attr_EXTRAS   \
+bool isMethod () {return false;}; \
+bool isAttr () {return true;}; \
+Symbol get_type() { return type_decl; }              \
+Formals get_formals(){return *(new Formals);};
 
 
 
 
 #define Formal_EXTRAS                              \
-virtual void dump_with_types(ostream&,int) = 0;
+virtual void dump_with_types(ostream&,int) = 0;   \
+virtual Symbol get_type() = 0;         \
+virtual Symbol get_name() = 0;
 
 
 #define formal_EXTRAS                           \
-void dump_with_types(ostream&,int);
+void dump_with_types(ostream&,int);    \
+Symbol get_type() { return type_decl; }   \
+Symbol get_name() { return name; }
 
 
 #define Case_EXTRAS                             \
-virtual void dump_with_types(ostream& ,int) = 0;
+virtual void dump_with_types(ostream& ,int) = 0;\
+virtual Symbol checktype () = 0;       \
+virtual Symbol get_type () = 0;
 
 
 #define branch_EXTRAS                                   \
-void dump_with_types(ostream& ,int);
+void dump_with_types(ostream& ,int);            \
+Symbol checktype ();                      \
+Symbol get_type (){return type_decl;}
 
 
 #define Expression_EXTRAS                    \
@@ -97,9 +138,11 @@ Symbol get_type() { return type; }           \
 Expression set_type(Symbol s) { type = s; return this; } \
 virtual void dump_with_types(ostream&,int) = 0;  \
 void dump_type(ostream&, int);               \
-Expression_class() { type = (Symbol) NULL; }
+Expression_class() { type = (Symbol) NULL; }  \
+virtual Symbol checktype () = 0;
 
 #define Expression_SHARED_EXTRAS           \
-void dump_with_types(ostream&,int); 
+void dump_with_types(ostream&,int);        \
+Symbol checktype ();
 
 #endif
