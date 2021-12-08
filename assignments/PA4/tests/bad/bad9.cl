@@ -1,6 +1,6 @@
 -- no such types
 class A {
-    -- assume the type of var as Object
+    -- assume the type of var as Noc1
     var : Noc1;                                      --bad
     g (): Int {var};
     var : Noc2 <- 0;                                 --bad
